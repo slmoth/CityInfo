@@ -42,13 +42,24 @@ namespace CityInfo.API
                     Id = 2,
                     Name = "Antwerp",
                     Description = "The one with the cathedral that was never really finished",
-                    PointsOfInterest = null
+                    PointsOfInterest = new List<PointsOfInterestDto>(){ }
+
                 },
                 new CityDto
                 {
                     Id = 3,
                     Name = "Paris",
-                    Description = "The one with the big tower"
+                    Description = "The one with the big tower",
+                    PointsOfInterest = new List<PointsOfInterestDto>()
+                    {
+                        new PointsOfInterestDto()
+                        {
+                            Id = 1,
+                            Name = "Paris POI 1",
+                            Description = "POI 1 for Paris"
+                        }
+                    }
+
                 }
 
             };
