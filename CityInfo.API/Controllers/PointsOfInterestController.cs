@@ -66,8 +66,7 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
 
-            var maxPointOfInterestId = CitiesDataStore.Current.Cities.SelectMany(
-                c => c.PointsOfInterest).Max(p => p.Id);
+            var maxPointOfInterestId = city.PointsOfInterest.Max(p => p.Id);
 
             var finalPointOfInterest = new Models.PointsOfInterestDto()
             {
