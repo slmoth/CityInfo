@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CityInfo.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -59,6 +60,11 @@ namespace CityInfo.API.Controllers
                 return BadRequest();
             }
 
+            if (pointOfInterest.Description == pointOfInterest.Name)
+            {
+                ModelState.AddModelError("Description", "The description should not be the same as the name");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -85,6 +91,44 @@ namespace CityInfo.API.Controllers
             return CreatedAtRoute("GetPointOfInterest", new
             { cityId = cityID, id = finalPointOfInterest.Id }, finalPointOfInterest); 
         }
-         
+         [HttpPut("{cityID}/pointsofinterest/{id}")]
+
+         public IActionResult UpdatePointOfInterest(int cityID, int id,
+             [FromBody] PointOfInterestForUpdateDto pointOfInterest)
+        {
+            if (pointOfInterest == null)
+            {
+                return BadRequest();
+            }
+
+            if (pointOfInterest.Description == pointOfInterest.Name)
+            {
+                ModelState.AddModelError("Description", "The description should not be the same as the name");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityID);
+
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            var pointOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(p => p.Id == id);
+
+            if (pointOfInterestFromStore == null)
+            {
+                return NotFound();
+            }
+
+            pointOfInterestFromStore.Name = pointOfInterest.Name;
+            pointOfInterestFromStore.Description = pointOfInterest.Description;
+
+            return NoContent();
+        }
     }
 }

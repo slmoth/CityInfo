@@ -11,8 +11,7 @@ namespace CityInfo.API
         public static CitiesDataStore Current { get; } = new CitiesDataStore();
         public List<CityDto> Cities { get; set; }
 
-        public CitiesDataStore()
-        {
+        public CitiesDataStore() =>
             //dummy data
             Cities = new List<CityDto>()
             {
@@ -57,7 +56,7 @@ namespace CityInfo.API
                             Id = 1,
                             Name = "Paris POI 1",
                             Description = "POI 1 for Paris"
-                        }
+                        },
                          new PointsOfInterestDto()
                         {
                             Id = 2,
@@ -81,6 +80,5 @@ namespace CityInfo.API
                 }
 
             };
-        }
     }
 }
