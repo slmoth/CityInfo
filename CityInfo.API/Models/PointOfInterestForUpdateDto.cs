@@ -11,6 +11,7 @@ namespace CityInfo.API.Models
         [Required(ErrorMessage = "Name is a required field.")]
         [MaxLength(50)]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Description is a required field.")]
         [MaxLength(200)]
         public string Description { get; set; }
     }

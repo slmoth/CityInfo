@@ -28,6 +28,8 @@ namespace CityInfo.API
         {
             loggerfactory.AddConsole();
 
+            loggerfactory.AddDebug();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
