@@ -28,14 +28,13 @@ namespace CityInfo.API.Controllers
         {
             try
             {
-                throw new Exception("sample exception");
-
+                throw new Exception();
                 var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityID);
 
                 if (city == null)
                 {
-                    _logger.LogInformation($"City with {cityID} not found");
-                    return NotFound();
+                    _logger.LogInformation($"City with id {cityID} not found");
+                    return StatusCode(202, "City not found");
                 }
 
                 if (city.PointsOfInterest == null || city.PointsOfInterest.Count == 0)
