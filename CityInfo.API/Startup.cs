@@ -22,8 +22,13 @@ namespace CityInfo.API
             services.AddMvc()
                 .AddMvcOptions(o => o.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()) );
-
-            services.AddTransient<LocalMailService>();
+#if DEBUG
+            services.AddTransient<IMailService, LocalMailService>();
+            Console.WriteLine("Debug is enabled");
+#else
+            services.AddTransient<IMailService, CloudMailService>();
+            Console.WriteLine("Debug is disabled");
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
