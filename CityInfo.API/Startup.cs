@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using NLog.Extensions.Logging;
 using CityInfo.API.Services;
 using Microsoft.Extensions.Configuration;
+using CityInfo.API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.API
 {
@@ -42,6 +44,9 @@ namespace CityInfo.API
             services.AddTransient<IMailService, CloudMailService>();
             Console.WriteLine("Debug is disabled");
 #endif
+            var connectionString = @"Server=(localdb)\ProjectsV13; Initial Catalog=CityInfoDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
