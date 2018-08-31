@@ -25,7 +25,8 @@ namespace CityInfo.API
             var builder = new ConfigurationBuilder()
                  .SetBasePath(env.ContentRootPath)
                  .AddJsonFile("appSettings.json", optional: false, reloadOnChange: true)
-                 .AddJsonFile($"appSettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                 .AddJsonFile($"appSettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
         }
@@ -44,13 +45,15 @@ namespace CityInfo.API
             services.AddTransient<IMailService, CloudMailService>();
             Console.WriteLine("Debug is disabled");
 #endif
-            var connectionString = @"Server=(localdb)\ProjectsV13; Initial Catalog=CityInfoDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            var connectionString = Configuration["connectionStrings:cityInfoDBConnectionString"];
             services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
+
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory, CityInfoContext cityInfoContext)
         {
             loggerfactory.AddConsole();
 
@@ -76,6 +79,7 @@ namespace CityInfo.API
             //{
             //    await context.Response.WriteAsync("Hello World!");
             //});
+            cityInfoContext.EnsureSeedDataForContext();
         }
     }
 }
