@@ -18,12 +18,13 @@ namespace CityInfo.API.Controllers
     {
         private ILogger<PointsOfInterestController> _logger;
         private IMailService _mailService;
-
-
-        public PointsOfInterestController(ILogger<PointsOfInterestController> logger, IMailService mailService)
+        private ICityInfoRepository _cityInfoRepository;
+        
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger, IMailService mailService, ICityInfoRepository cityInfoRepository)
         {
             _logger = logger;
             _mailService = mailService;
+            _cityInfoRepository = cityInfoRepository;
         }
 
     

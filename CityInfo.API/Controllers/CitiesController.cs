@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
-
+using AutoMapper;
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CityInfo.API.Controllers
@@ -22,31 +19,35 @@ namespace CityInfo.API.Controllers
         [HttpGet()]
         public IActionResult GetCities()
         {
-            // return Ok(CitiesDataStore.Current.Cities);
+           
             var cityEntities = _cityInfoRepository.GetCities();
-            var results = new List<CityWithoutPointsOfInterestDto>();
+            var results = AutoMapper.Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities);
 
-            foreach (var cityEntity in cityEntities)
-            {
-                results.Add(new CityWithoutPointsOfInterestDto
-                {
-                    Id = cityEntity.Id,
-                    Name = cityEntity.Name,
-                    Description = cityEntity.Description
-                });
-            }
+           
             return Ok(results);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCity(int id)
+        public IActionResult GetCity(int id, bool includePointsOfInterest = false)
         {
-            var cityToReturn = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
-            if (cityToReturn == null)
+            var city = _cityInfoRepository.GetCity(id, includePointsOfInterest);
+
+            if (city == null)
             {
                 return NotFound();
             }
-            return Ok(cityToReturn);
+
+            if (includePointsOfInterest)
+            {
+                var cityResult = Mapper.Map<CityDto>(city);
+
+                return Ok(cityResult);
+            }
+
+            var cityWithoutPointsOfInterestResult = Mapper.Map<CityWithoutPointsOfInterestDto>(city);
+            return Ok(cityWithoutPointsOfInterestResult);
+
+            
         }
 
     }
